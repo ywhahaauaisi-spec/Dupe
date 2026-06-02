@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "dupe",
+  "version": "1.0.0",
+  "name": "Dupe Mod",
+  "description": "Duplicate items in your hand with /dupe command",
+  "authors": ["DupeModTeam"],
+  "contact": {
+    "homepage": "https://github.com/ywhahaauaisi-spec/Dupe"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.dupe.DupeMod"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.1",
+    "java": ">=21"
+  }
+}
