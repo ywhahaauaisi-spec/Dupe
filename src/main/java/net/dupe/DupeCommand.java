@@ -32,13 +32,8 @@ public class DupeCommand {
                         return 0;
                     }
                     
-                    // Advanced technique: Deep clone with NBT preservation
-                    ItemStack duplicate = new ItemStack(heldItem.getItem(), heldItem.getCount());
-                    
-                    // Copy exact NBT data (enchantments, custom name, lore, etc)
-                    if (heldItem.getTag() != null) {
-                        duplicate.setTag(heldItem.getTag().copy());
-                    }
+                    // Deep clone the item
+                    ItemStack duplicate = heldItem.copy();
                     
                     // Add to inventory or drop if full
                     if (!player.getInventory().insertStack(duplicate)) {
