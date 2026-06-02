@@ -1,50 +1,74 @@
 plugins {
-	id 'fabric-loom' version '1.8.10'
-	id 'maven-publish'
+    id 'java'
+    id 'net.minecraftforge.gradle' version '6.0.x'
+    id 'maven-publish'
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
-base {
-	archivesName = 'dupe-mod'
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 group = 'net.dupe'
-version = '1.0.0'
+base {
+    archivesName = 'dupe-mod'
+}
+version = '1.0.0-forge'
 
-repositories {
-	mavenCentral()
-	maven { url = 'https://api.modrinth.com/maven' }
-	maven { url = 'https://maven.fabricmc.net/' }
+minecraft {
+    mappings channel: 'official', version: '1.21.1'
+    
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.level', 'debug'
+            mods {
+                dupe {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.level', 'debug'
+            mods {
+                dupe {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.21.1"
-	mappings "net.fabricmc:yarn:1.21.1+build.1:v2"
-	modImplementation "net.fabricmc:fabric-loader:0.16.9"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
+    minecraft 'net.minecraftforge:forge:1.21.1-52.0.0'
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'      : 'dupe',
+                'Specification-Vendor'     : 'DupeTeam',
+                'Specification-Version'    : '1',
+                'Implementation-Title'     : project.name,
+                'Implementation-Version'   : project.jar.archiveVersion,
+                'Implementation-Vendor'    : 'DupeTeam',
+                'Implementation-Timestamp' : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
-jar {
-	from "LICENSE"
-}
+jar.finalizedBy('reobfJar')
 
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-	repositories {
-		maven {
-			url = "file://" + System.getenv("user.home") + "/.m2/repository"
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + System.getenv("user.home") + "/.m2/repository"
+        }
+    }
 }
