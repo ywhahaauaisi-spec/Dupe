@@ -5,7 +5,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.nbt.NbtCompound;
 import com.mojang.brigadier.CommandDispatcher;
 
 public class DupeCommand {
@@ -37,8 +36,8 @@ public class DupeCommand {
                     ItemStack duplicate = new ItemStack(heldItem.getItem(), heldItem.getCount());
                     
                     // Copy exact NBT data (enchantments, custom name, lore, etc)
-                    if (heldItem.getNbt() != null) {
-                        duplicate.setNbt(heldItem.getNbt().copy());
+                    if (heldItem.getTag() != null) {
+                        duplicate.setTag(heldItem.getTag().copy());
                     }
                     
                     // Add to inventory or drop if full
